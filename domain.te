@@ -504,11 +504,12 @@ neverallow {
   -init
   -runas
   -zygote
+  userdebug_or_eng(`-qti-testscripts')
 } shell:process { transition dyntransition };
 
 # Only domains spawned from zygote and runas may have the appdomain attribute.
 neverallow { domain -runas -zygote } {
-  appdomain -shell userdebug_or_eng(`-su') -bluetooth
+  appdomain -shell userdebug_or_eng(`-su') -bluetooth userdebug_or_eng(`-qti-testscripts')
 }:process { transition dyntransition };
 
 # Minimize read access to shell- or app-writable symlinks.
@@ -589,7 +590,7 @@ neverallow * domain:file { execute execute_no_trans entrypoint };
 # Instead, if access to part of debugfs is desired, it should have a
 # more specific label.
 # TODO: fix system_server and dumpstate
-neverallow { domain -init -system_server -dumpstate } debugfs:file no_rw_file_perms;
+neverallow { domain -init -system_server -dumpstate -audioserver -energyawareness -rmt_storage} debugfs:file no_rw_file_perms;
 
 neverallow {
   domain
